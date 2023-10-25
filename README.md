@@ -31,7 +31,6 @@ HTML, CSS, JavaScript
 | Body           | Name of Game, time, attempts, game body, and start/restart button |
 | Section        |                      Time, and user attempts                      |
 | Main           |                          Body for cards                           |
-| Location       |    Info about single location and contains residing characters    |
 | Div class card |                       Background for cards                        |
 | Img            |                        Images of the cards                        |
 
