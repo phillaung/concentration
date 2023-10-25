@@ -3,7 +3,7 @@ let count = 0;
 let cards = [...Array(16).keys()];
 let game = [[0,1], [2,3], [4,5], [6,7], 
 [8,9], [10,11], [12,13], [14,15]]
-let current;
+let current, attempts, timer, seconds;
 
 const bannerImg = 'url(media/banner.png)';
 const circleImg = 'url(media/circle.png)';
@@ -20,14 +20,15 @@ const images = document.querySelectorAll('img');
 
 
 function init() {
-
     button.addEventListener('click', handleButtonClick);
 
     images.forEach((img) => {
         img.addEventListener('click', handleImageClick);
     });
 
+    attempts = 0
     count = 0
+    seconds = 0
     button.innerHTML = 'start';
     current = [-1, -1];
 
@@ -38,6 +39,8 @@ function init() {
         cards[rng] = temp
     })
 
+    setAttempts(attempts)
+    setTimer(seconds)
     console.log(cards);
 
     images.forEach((img, i) => {
@@ -73,19 +76,25 @@ function init() {
 function handleButtonClick() {
     if (button.innerHTML == 'start') {
         button.innerHTML = 'restart';
+        seconds = 0;
+        timer = setInterval(() => {
+            seconds += 1;
+            setTimer(seconds)
+        }, 1000);
     } else {
+        clearInterval(timer);
         init();
     }
 }
 
 function handleImageClick(evt) {
     if (button.innerHTML == 'restart') {
-        console.log('click')
+        attempts++
         if (count < 2) {
             count++;
             evt.target.style.opacity = '100%';
             const background = Array.prototype.slice.call(
-                document.querySelector('main').children
+                document.querySelector('#game').children
             );
             current[count - 1] = background.indexOf(evt.target.parentElement);
         }
@@ -116,6 +125,7 @@ function handleImageClick(evt) {
                     });
                     if (gameOver) {
                         setTimeout(() => {
+                            clearInterval(timer);
                             init();
                         }, 1000);
                     }
@@ -123,7 +133,16 @@ function handleImageClick(evt) {
                 count = 0;
             }, 500);
         }
+        setAttempts(attempts)
     }
 }
 
 init()
+
+function setAttempts(count) {
+    document.querySelector('.attempts').innerHTML = count;
+}
+
+function setTimer(count) {
+    document.querySelector('.time').innerHTML = count;
+}
