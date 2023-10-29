@@ -10,6 +10,7 @@ p {
 }
 
 #game {
+    position: relative;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr 1fr;
@@ -18,6 +19,7 @@ p {
     height: 350px;
     margin: 0 auto;
 }
+
 
 .card {
     background-color:bisque;
@@ -34,10 +36,27 @@ img {
     background-position: center;
 }
 
+#game-over {
+    position: absolute;
+    width: 60%;
+    border-radius: 15px;
+    margin: 30% 15%;
+    padding: 5%;
+    background-color: #375a4a;
+}
+
+#game-over h3 {
+    color: bisque;
+    margin: 0;
+}
+
 button {
-    margin-top: 15px;
     padding: 5px 20px;
     background-color: bisque;
+}
+
+#btn-start {
+    margin-top: 15px;
 }
 
 #instruction h3 {

@@ -14,13 +14,11 @@ const rectangleImg = 'url(media/rectangle.png)';
 const squareImg = 'url(media/square.png)';
 const wavyImg = 'url(media/wavy.png)';
 
-const button = document.querySelector('button')
+const startButton = document.querySelector('#btn-start')
 const images = document.querySelectorAll('img');
 
-
-
 function init() {
-    button.addEventListener('click', handleButtonClick);
+    startButton.addEventListener('click', handleButtonClick);
 
     images.forEach((img) => {
         img.addEventListener('click', handleImageClick);
@@ -29,7 +27,7 @@ function init() {
     attempts = 0
     count = 0
     seconds = 0
-    button.innerHTML = 'start';
+    startButton.innerHTML = 'start';
     current = [-1, -1];
 
     cards.forEach( card => {
@@ -74,12 +72,12 @@ function init() {
 
 
 function handleButtonClick() {
-    if (button.innerHTML == 'start') {
-        button.innerHTML = 'restart';
+    if (startButton.innerHTML == 'start') {
+        startButton.innerHTML = 'restart';
         seconds = 0;
         timer = setInterval(() => {
             seconds += 1;
-            setTimer(seconds)
+            setTimer(seconds);
         }, 1000);
     } else {
         clearInterval(timer);
@@ -88,8 +86,8 @@ function handleButtonClick() {
 }
 
 function handleImageClick(evt) {
-    if (button.innerHTML == 'restart') {
-        attempts++
+    if (startButton.innerHTML == 'restart') {
+        attempts++;
         if (count < 2) {
             count++;
             evt.target.style.opacity = '100%';
@@ -108,7 +106,10 @@ function handleImageClick(evt) {
                         matchingCombo.sort().toString()
                     ) {
                         match = true;
-                        images[current[0]].removeEventListener('click', handleImageClick)
+                        images[current[0]].removeEventListener(
+                            'click',
+                            handleImageClick
+                        );
                         images[current[1]].removeEventListener(
                             'click',
                             handleImageClick
@@ -124,16 +125,13 @@ function handleImageClick(evt) {
                         if (img.style.opacity == '0') gameOver = false;
                     });
                     if (gameOver) {
-                        setTimeout(() => {
-                            clearInterval(timer);
-                            init();
-                        }, 1000);
+                        handleGameOver();
                     }
                 }
                 count = 0;
             }, 500);
         }
-        setAttempts(attempts)
+        setAttempts(attempts);
     }
 }
 
@@ -144,5 +142,23 @@ function setAttempts(count) {
 }
 
 function setTimer(count) {
-    document.querySelector('.time').innerHTML = count;
+    document.querySelector('.time').innerHTML = count + ' s';
+}
+
+function handleGameOver() {
+    clearInterval(timer);
+    const gameOver = document.createElement('div')
+    gameOver.setAttribute('id', 'game-over')
+    gameOver.innerHTML = `<h3>You Win!</h3>
+                          <p>
+                              Time: ${seconds} s Attempts: ${attempts}
+                          </p>
+                          <button id="btn-restart">play again</button>`
+    const game = document.querySelector('#game')
+    game.appendChild(gameOver)
+    const restartButton = document.querySelector('#btn-restart')
+    restartButton.addEventListener('click', function () {
+        init()
+        game.removeChild(gameOver)
+    })
 }
